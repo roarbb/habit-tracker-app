@@ -10,6 +10,7 @@ type Mutation {
 
 type Query {
   hi: String
+  habits: [Habit]
 }
 
 type User{
