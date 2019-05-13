@@ -1,5 +1,9 @@
 # source: http://localhost:4466
-# timestamp: Sun May 12 2019 20:57:11 GMT+0200 (Central European Summer Time)
+# timestamp: Mon May 13 2019 15:11:22 GMT+0200 (Central European Summer Time)
+
+type AggregateHabit {
+  count: Int!
+}
 
 type AggregateUser {
   count: Int!
@@ -10,6 +14,189 @@ type BatchPayload {
   count: Long!
 }
 
+type Habit implements Node {
+  id: ID!
+  label: String!
+}
+
+"""A connection to a list of items."""
+type HabitConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [HabitEdge]!
+  aggregate: AggregateHabit!
+}
+
+input HabitCreateInput {
+  id: ID
+  label: String!
+}
+
+"""An edge in a connection."""
+type HabitEdge {
+  """The item at the end of the edge."""
+  node: Habit!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum HabitOrderByInput {
+  id_ASC
+  id_DESC
+  label_ASC
+  label_DESC
+}
+
+type HabitPreviousValues {
+  id: ID!
+  label: String!
+}
+
+type HabitSubscriptionPayload {
+  mutation: MutationType!
+  node: Habit
+  updatedFields: [String!]
+  previousValues: HabitPreviousValues
+}
+
+input HabitSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [HabitSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [HabitSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [HabitSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: HabitWhereInput
+}
+
+input HabitUpdateInput {
+  label: String
+}
+
+input HabitUpdateManyMutationInput {
+  label: String
+}
+
+input HabitWhereInput {
+  """Logical AND on all given filters."""
+  AND: [HabitWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [HabitWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [HabitWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  label: String
+
+  """All values that are not equal to given value."""
+  label_not: String
+
+  """All values that are contained in given list."""
+  label_in: [String!]
+
+  """All values that are not contained in given list."""
+  label_not_in: [String!]
+
+  """All values less than the given value."""
+  label_lt: String
+
+  """All values less than or equal the given value."""
+  label_lte: String
+
+  """All values greater than the given value."""
+  label_gt: String
+
+  """All values greater than or equal the given value."""
+  label_gte: String
+
+  """All values containing the given string."""
+  label_contains: String
+
+  """All values not containing the given string."""
+  label_not_contains: String
+
+  """All values starting with the given string."""
+  label_starts_with: String
+
+  """All values not starting with the given string."""
+  label_not_starts_with: String
+
+  """All values ending with the given string."""
+  label_ends_with: String
+
+  """All values not ending with the given string."""
+  label_not_ends_with: String
+}
+
+input HabitWhereUniqueInput {
+  id: ID
+}
+
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
@@ -18,11 +205,17 @@ scalar Long
 
 type Mutation {
   createUser(data: UserCreateInput!): User!
+  createHabit(data: HabitCreateInput!): Habit!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateHabit(data: HabitUpdateInput!, where: HabitWhereUniqueInput!): Habit
   deleteUser(where: UserWhereUniqueInput!): User
+  deleteHabit(where: HabitWhereUniqueInput!): Habit
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertHabit(where: HabitWhereUniqueInput!, create: HabitCreateInput!, update: HabitUpdateInput!): Habit!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  updateManyHabits(data: HabitUpdateManyMutationInput!, where: HabitWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyHabits(where: HabitWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -54,8 +247,11 @@ type PageInfo {
 
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  habits(where: HabitWhereInput, orderBy: HabitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Habit]!
   user(where: UserWhereUniqueInput!): User
+  habit(where: HabitWhereUniqueInput!): Habit
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  habitsConnection(where: HabitWhereInput, orderBy: HabitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): HabitConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -66,6 +262,7 @@ type Query {
 
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  habit(where: HabitSubscriptionWhereInput): HabitSubscriptionPayload
 }
 
 type User implements Node {

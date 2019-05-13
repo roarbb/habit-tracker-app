@@ -2,3 +2,8 @@ type User {
   id: ID! @id
   name: String!
 }
+
+type Habit {
+  id: ID! @id
+  label: String!
+}
