@@ -5,11 +5,10 @@ type SuccessMessage {
 }
 
 type Mutation {
-  hi: String
+  createHabit(label: String!): Habit!
 }
 
 type Query {
-  hi: String
   habits: [Habit]
 }
 
