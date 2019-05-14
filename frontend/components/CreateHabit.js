@@ -54,6 +54,7 @@ class CreateHabit extends Component {
                 id="label"
                 name="label"
                 type="text"
+                autoComplete="off"
                 value={this.state.label}
                 onChange={this.handleChange} />
             </label>
