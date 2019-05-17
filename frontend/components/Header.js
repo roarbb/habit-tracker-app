@@ -1,5 +1,6 @@
 import NProgress from 'nprogress';
 import Router from 'next/router';
+import Nav from './Nav';
 
 Router.onRouteChangeStart = () => {
   NProgress.start();
@@ -15,9 +16,10 @@ Router.onRouteChangeError = () => {
 
 const Header = () => (
   <div>
-    <div className="bar">
-      Header
+    <div className="logo">
+      Habit Tracker App
     </div>
+    <Nav />
   </div>
 );
 
