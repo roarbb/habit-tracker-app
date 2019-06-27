@@ -2,7 +2,6 @@ const { forwardTo } = require('prisma-binding');
 const { hasPermission } = require('../utils');
 
 const Query = {
-  habits: forwardTo('db'),
   me(parent, args, ctx, info) {
     // check if there is a current user ID
     if (!ctx.request.userId) {
@@ -15,6 +14,7 @@ const Query = {
       info
     );
   },
+
   async users(parent, args, ctx, info) {
     // 1. Check if they are logged in
     if (!ctx.request.userId) {
@@ -26,6 +26,21 @@ const Query = {
 
     // 2. if they do, query all the users!
     return ctx.db.query.users({}, info);
+  },
+
+  async habits(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+
+    return ctx.db.query.habits(
+      {
+        where: {
+          user: { id: ctx.request.userId },
+        },
+      },
+      info
+    );
   },
 };
 
