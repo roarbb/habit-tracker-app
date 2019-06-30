@@ -3,6 +3,7 @@ import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { CURRENT_USER_QUERY } from './User';
 import Router from 'next/router';
+import { Button } from 'antd';
 
 const SIGN_OUT_MUTATION = gql`
   mutation SIGN_OUT_MUTATION {
@@ -16,13 +17,13 @@ const Signout = props => (
   <Mutation mutation={SIGN_OUT_MUTATION}>
     {(signout, { client }) => {
       return (
-        <button onClick={() => {
+        <Button type="primary" onClick={() => {
           signout().then(() => {
             sessionStorage.clear()
             client.clearStore();
             Router.push('/');
           });
-        }}>Sign Out</button>
+        }}>Sign Out</Button>
       )
     }}
   </Mutation>

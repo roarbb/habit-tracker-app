@@ -1,6 +1,8 @@
 import NProgress from 'nprogress';
 import Router from 'next/router';
 import Nav from './Nav';
+import { Layout } from 'antd';
+import styled from 'styled-components';
 
 Router.onRouteChangeStart = () => {
   NProgress.start();
@@ -13,14 +15,17 @@ Router.onRouteChangeError = () => {
   NProgress.done();
 };
 
+const Logo = styled.div`
+  float: left;
+  color: white;
+`;
+
 
 const Header = () => (
-  <div>
-    <div className="logo">
-      Habit Tracker App
-    </div>
+  <Layout.Header>
+    <Logo>Habit Tracker App</Logo>
     <Nav />
-  </div>
+  </Layout.Header>
 );
 
 export default Header;

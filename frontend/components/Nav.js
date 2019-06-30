@@ -1,27 +1,38 @@
 import Link from 'next/link';
 import User from './User';
 import Signout from './Signout';
+import { Menu, Button } from 'antd';
 
 const Nav = () => (
+
   <User>
     {({ data: { me } }) => (
-      <div>
+      <>
         {me && (
-          <>
-            <Link href="/habits">
-              <a>Habits</a>
-            </Link>
+          <Menu
+            theme="dark"
+            mode="horizontal"
+            defaultSelectedKeys={['2']}
+            style={{ lineHeight: '64px' }}
+          >
+            <Menu.Item key="1"><Link href="/habits">Habits</Link></Menu.Item>
             <Signout />
-          </>
+          </Menu>
         )}
         {!me && (
-          <Link href="/signup">
-            <a>Sign In</a>
-          </Link>
+          <Menu
+            theme="dark"
+            mode="horizontal"
+            defaultSelectedKeys={['2']}
+            style={{ lineHeight: '64px' }}
+          >
+            <Link href="/signup"><Button type="primary">Sign In</Button></Link>
+          </Menu>
         )}
-      </div>
+      </>
     )}
   </User>
+
 );
 
 export default Nav;
